@@ -1,6 +1,23 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import axios from 'axios';
 
 const Home = () => {
+    const [posts, setPosts] = useState();
+
+    const getPosts = async () => {
+        try {
+            const posts = await axios.get('http://localhost:3000/api/v1/posts')
+            console.log(posts.data)
+            setPosts(posts.data);
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    useEffect(() => {
+        getPosts();
+    }, [])
+
     return (
         <div>
             <header>
@@ -29,31 +46,23 @@ const Home = () => {
                     </div>
                     <div className="box">
                         <ul className='list-unstyled d-flex flex-column gap-4 m-3'>
-                            <li className='list-box'>
-                                <h3>授業名：青山学院大学の歴史</h3>
-                                <h4>担当教員：青山 太郎</h4>
-                                <p>主席ナシ、課題は楽です</p>
-                            </li>
-                            <li className='list-box'>
-                                <h3>授業名：青山学院大学の歴史</h3>
-                                <h4>担当教員：青山 太郎</h4>
-                                <p>主席ナシ、課題は楽です</p>
-                            </li>
-                            <li className='list-box'>
-                                <h3>授業名：青山学院大学の歴史</h3>
-                                <h4>担当教員：青山 太郎</h4>
-                                <p>主席ナシ、課題は楽です</p>
-                            </li>
+                            {posts && posts.map((post) => (
+                                <li className='list-box' key={post._id}>
+                                    <h3>授業名：{post.title}</h3>
+                                    <h4>担当教員：青山 太郎</h4>
+                                    <p>{post.content}</p>
+                                </li>
+                            ))}
                         </ul>
                     </div>
                 </div>
-            </main>
+            </main >
             <footer>
                 <div className="copyright pb-2">
                     <p className='text-center'>&copy; 青山学院大学 落単授業掲示板 2023</p>
                 </div>
             </footer>
-        </div>
+        </div >
     )
 }
 
