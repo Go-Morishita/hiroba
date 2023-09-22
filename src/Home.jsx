@@ -1,39 +1,23 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
+import React from 'react'
 
 const Home = () => {
-
-    const [Posts, setPosts] = useState();
-
-    const getPosts = async () => {
-        try {
-            let Posts = await axios.get('http://localhost:3000/api/v1/posts')
-            console.log(Posts.data)
-            setPosts(Posts.data);
-        } catch (err) {
-            console.log(err)
-        }
-    }
-
-
-    //サイトにアクセスした際に一度だけデータを取得
-    useEffect(() => {
-        getPosts();
-    }, [])
-
     return (
         <div>
             <header>
                 <div className="container d-flex align-items-center">
-                    <h1>青山学院大学 落単授業掲示板</h1>
+                    <h1 className='topname-style text-center'>青山学院大学 落単授業掲示板</h1>
                 </div>
             </header>
             <main>
                 <div className="container">
-                    <div>
+                    <div className='box'>
                         <form action="">
                             <div>
                                 <h3>授業名</h3>
+                                <input type="text" />
+                            </div>
+                            <div>
+                                <h3>担当教員</h3>
                                 <input type="text" />
                             </div>
                             <div>
@@ -43,18 +27,29 @@ const Home = () => {
                             <input type="submit" />
                         </form>
                     </div>
-                    <ul className='list-unstyled d-flex flex-column gap-2'>
-                        {Posts && Posts.map((Post) =>
-                            <li className='border border-dark' key={Post._id}>
-                                <h3>{Post.title}</h3>
-                                <p>{Post.content}</p>
-                            </li>)
-                        }
-                    </ul>
+                    <div className="box">
+                        <ul className='list-unstyled d-flex flex-column gap-4 m-3'>
+                            <li className='list-box'>
+                                <h3>授業名：青山学院大学の歴史</h3>
+                                <h4>担当教員：青山 太郎</h4>
+                                <p>主席ナシ、課題は楽です</p>
+                            </li>
+                            <li className='list-box'>
+                                <h3>授業名：青山学院大学の歴史</h3>
+                                <h4>担当教員：青山 太郎</h4>
+                                <p>主席ナシ、課題は楽です</p>
+                            </li>
+                            <li className='list-box'>
+                                <h3>授業名：青山学院大学の歴史</h3>
+                                <h4>担当教員：青山 太郎</h4>
+                                <p>主席ナシ、課題は楽です</p>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </main>
             <footer>
-                <div className="copyright">
+                <div className="copyright pb-2">
                     <p className='text-center'>&copy; 青山学院大学 落単授業掲示板 2023</p>
                 </div>
             </footer>
