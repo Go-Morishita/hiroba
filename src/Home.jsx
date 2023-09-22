@@ -1,6 +1,26 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
 
 const Home = () => {
+
+    const [Posts, setPosts] = useState();
+
+    const getPosts = async () => {
+        try {
+            let Posts = await axios.get('http://localhost:3000/api/v1/posts')
+            console.log(Posts.data)
+            setPosts(Posts.data);
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+
+    //サイトにアクセスした際に一度だけデータを取得
+    useEffect(() => {
+        getPosts();
+    }, [])
+
     return (
         <div>
             <header>
@@ -18,24 +38,18 @@ const Home = () => {
                             </div>
                             <div>
                                 <h3>内容</h3>
-                            <textarea name="" id="" cols="30" rows="10"></textarea>
+                                <textarea name="" id="" cols="30" rows="10"></textarea>
                             </div>
                             <input type="submit" />
                         </form>
                     </div>
                     <ul className='list-unstyled d-flex flex-column gap-2'>
-                        <li className='border border-dark'>
-                            <h3>授業名：青山学院大学の歴史</h3>
-                            <p>主席ナシ、課題は楽です</p>
-                        </li>
-                        <li className='border border-dark'>
-                            <h3>授業名：青山学院大学の歴史</h3>
-                            <p>主席ナシ、課題は楽です</p>
-                        </li>
-                        <li className='border border-dark'>
-                            <h3>授業名：青山学院大学の歴史</h3>
-                            <p>主席ナシ、課題は楽です</p>
-                        </li>
+                        {Posts && Posts.map((Post) =>
+                            <li className='border border-dark' key={Post._id}>
+                                <h3>{Post.title}</h3>
+                                <p>{Post.content}</p>
+                            </li>)
+                        }
                     </ul>
                 </div>
             </main>
