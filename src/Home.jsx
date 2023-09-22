@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 
 const Home = () => {
-    const [posts, setPosts] = useState();
+    const [posts, setPosts] = useState(null);
+    const [subject, setSubject] = useState('');
+    const [content, setContent] = useState('');
 
     const getPosts = async () => {
         try {
@@ -11,6 +13,24 @@ const Home = () => {
             setPosts(posts.data);
         } catch (err) {
             console.log(err)
+        }
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (subject && content) {
+            try {
+                await axios.post('http://localhost:3000/api/v1/post', {
+                    title: subject,
+                    content: content,
+                })
+                setSubject('')
+                setContent('')
+                getPosts();
+            } catch (err) {
+                console.log(err)
+            }
         }
     }
 
@@ -28,10 +48,10 @@ const Home = () => {
             <main>
                 <div className="container">
                     <div className='box'>
-                        <form action="">
+                        <form action="" onSubmit={handleSubmit}>
                             <div>
                                 <h3>授業名</h3>
-                                <input type="text" />
+                                <input type="text" onChange={(e) => setSubject(e.target.value)} value={subject}/>
                             </div>
                             <div>
                                 <h3>担当教員</h3>
@@ -39,9 +59,9 @@ const Home = () => {
                             </div>
                             <div>
                                 <h3>内容</h3>
-                                <textarea name="" id="" cols="30" rows="10"></textarea>
+                                <textarea name="" id="" cols="30" rows="10" onChange={(e) => setContent(e.target.value)} value={content}></textarea>
                             </div>
-                            <input type="submit" />
+                            <button type='submit'>送信</button>
                         </form>
                     </div>
                     <div className="box">
